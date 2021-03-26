@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
+    - name: Checkout codes
+      uses: actions/checkout@v2
+
     - name: try check run
       run: |
         head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
