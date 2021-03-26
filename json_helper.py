@@ -27,7 +27,7 @@ def cancel_workflow(data):
 def main():
 
   if sys.argv[1]=="check_run":
-    print(json.load(sys.stdin)["workflow_run"]["head_sha"])
+    print(json.load(sys.stdin)["workflow_run"]["head_commit"]["id"])
   elif sys.argv[1]=="get_trigger_id":
     print(json.load(sys.stdin)["workflow_run"]["id"])
   elif sys.argv[1]=="get_trigger_br":
