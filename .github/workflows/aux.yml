@@ -1,0 +1,19 @@
+name: Auxiliary checks
+
+on:
+  workflow_run:
+    workflows: ["Pull request test"]
+    types:
+      - requested
+
+jobs:
+  job1:
+    name:  first job
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: try check run
+      run: |
+        curl -X POST -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/check-runs \
+        -d '{"head_sha": "head_sha"}'
