@@ -20,7 +20,8 @@ jobs:
         head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
         echo $head_sha
         echo "HEAD_SHA=${head_sha}" >> $GITHUB_ENV
-#        echo "============================="
+        echo "============================="
+        echo $HEAD_SHA
 #        cat ${GITHUB_EVENT_PATH}
 #        echo "============================="
         ###curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
