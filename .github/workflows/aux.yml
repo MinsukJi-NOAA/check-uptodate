@@ -17,12 +17,12 @@ jobs:
 
     - name: try check run
       run: |
-        #head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
-        #echo $head_sha
-        #echo "HEAD_SHA=${head_sha}" >> $GITHUB_ENV
+        ###head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
+        ###echo $head_sha
+        ###echo "HEAD_SHA=${head_sha}" >> $GITHUB_ENV
         echo "============================="
         cat ${GITHUB_EVENT_PATH}
         echo "============================="
-        #curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
-        #https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/check-runs \
-        #-d '{"name": "name", "head_sha": "${{ head_sha }}"}'
+        ###curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+        ###https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/check-runs \
+        ###-d '{"name": "name", "head_sha": "${{ head_sha }}"}'
