@@ -21,6 +21,7 @@ jobs:
         echo $head_sha
         echo "HEAD_SHA=${head_sha}" >> $GITHUB_ENV
         echo "============================="
+        export HEAD_SHA
         echo $HEAD_SHA
 #        cat ${GITHUB_EVENT_PATH}
 #        echo "============================="
