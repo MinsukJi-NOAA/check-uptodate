@@ -18,7 +18,7 @@ jobs:
     - name: try check run
       run: |
         head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
-        echo "head_sha=${head_sha}" >> $GITHUB_ENV
+        echo "HEAD_SHA=${head_sha}" >> $GITHUB_ENV
         echo "============================="
         cat ${GITHUB_EVENT_PATH}
         echo "============================="
