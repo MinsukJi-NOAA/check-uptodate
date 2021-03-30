@@ -17,7 +17,7 @@ jobs:
 
     - name: yes
       run: |
-        echo GITHUB_WORKSPACE is ${GITHUB_WORKSPACE}
+        echo "GITHUB_WORKSPACE is ${GITHUB_WORKSPACE}"
         ls ${GITHUB_WORKSPACE} 
         echo "===================================================="
 #        curl -sS -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
