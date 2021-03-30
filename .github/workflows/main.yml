@@ -12,13 +12,13 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - name: checkout codes
-      uses: actions/checkout@v2
+#    - name: checkout codes
+#      uses: actions/checkout@v2
 
     - name: yes
       run: |
         echo "GITHUB_WORKSPACE is ${GITHUB_WORKSPACE}"
         ls ${GITHUB_WORKSPACE} 
         echo "===================================================="
-        sleep 60
-        ./say-hello
+#        sleep 60
+#        ./say-hello
