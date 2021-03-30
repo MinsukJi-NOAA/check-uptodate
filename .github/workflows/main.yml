@@ -28,10 +28,16 @@ jobs:
         submodules: recursive
         path: base
 
+    - name: checkout current repo
+      uses: actions/checkout@v2
+
     - name: yes
       run: |
         echo "GITHUB_WORKSPACE is ${GITHUB_WORKSPACE}"
         ls ${GITHUB_WORKSPACE} 
+        echo "===================================================="
+        echo "GITHUB_EVENT_PATH is ${GITHUB_EVENT_PATH}"
+        cat ${GITHUB_EVENT_PATH}
         echo "===================================================="
 #        sleep 60
 #        ./say-hello
