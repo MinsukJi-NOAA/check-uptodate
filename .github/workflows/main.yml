@@ -12,8 +12,21 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-#    - name: checkout codes
-#      uses: actions/checkout@v2
+    - name: checkout head repo
+      uses: actions/checkout@v2
+      with:
+        repository: MinsukJi-NOAA/ufs-weather-model
+        ref: feature/ci-regional-model
+        submodules: recursive
+        path: head
+
+    - name: checkout base repo
+      uses: actions/checkout@v2
+      with:
+        repository: ufs-community/ufs-weather-model
+        ref: develop
+        submodules: recursive
+        path: base
 
     - name: yes
       run: |
