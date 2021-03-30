@@ -71,7 +71,7 @@ git clone --quiet --branch ${head['branch']} --recurse-submodules ${head['repo']
 cd test-head
 head_dir=$(pwd)
 git remote add upstream ${base['repo']}
-git fetch upstream
+git fetch --quiet upstream
 base_common=$(git merge-base upstream/${base['branch']} @)
 if [[ $base_common == ${base[sha]} ]]; then
   echo "UFS up to date"
