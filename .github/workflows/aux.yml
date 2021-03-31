@@ -22,7 +22,8 @@ jobs:
         echo "============================="
         cat ${GITHUB_EVENT_PATH}
         echo "============================="
-        comment_body=$(./repo-check.sh MinsukJi-NOAA feature/ci-regional-model)
+        comment_body="$(./repo-check.sh MinsukJi-NOAA feature/ci-regional-model)"
+        echo ${comment_body}
         curl -sS -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
         https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/issues/2/comments \
         -d '{"body": "'"${comment_body}"'"}'
