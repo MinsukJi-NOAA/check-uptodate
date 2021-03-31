@@ -25,4 +25,4 @@ jobs:
         comment_body="Let us try this.\nWill this work?"
         curl -sS -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
         https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/issues/2/comments \
-        -d '{"body": "{{ $comment_body }}"}'
+        -d '{"body": "{{comment_body}}"}'
