@@ -1,17 +1,32 @@
 #!/bin/bash
 set -eu
 
+usage() {
+  echo
+  echo "Usage: $program <GitHub Username> <Branch name>"
+  echo
+  exit 1
+}
+
+#result_out() {
+#
+#}
+
+readonly program=$(basename $0)
+[[ $# != 2 ]] && usage
+
 declare -A head base fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake
 submodules="fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake"
 
-#head[repo]='https://github.com/MinsukJi-NOAA/ufs-weather-model'
-#head[branch]='feature/ci-regional-model'
-head[repo]="https://github.com/$1"
+# Head branch:this is a branch from which PR is made
+head[repo]="https://github.com/$1/ufs-weather-model"
 head[branch]="$2"
 
+# Base branch:this is the top of develop of ufs-weather-model
 base[repo]='https://github.com/ufs-community/ufs-weather-model'
 base[branch]='develop'
 
+# Submodules to check
 fv3[repo]='https://github.com/NOAA-EMC/fv3atm'
 fv3[branch]='develop'
 fv3[dir]='FV3'
@@ -52,40 +67,38 @@ cmake[repo]='https://github.com/NOAA-EMC/CMakeModules'
 cmake[branch]='develop'
 cmake[dir]='CMakeModules'
 
-# Get top-level and component-level SHA-1 of top of develop of ufs-weather-model
+# Get sha-1's of the top of develop of ufs-weather-model
 root_dir=$(pwd)
-git clone --quiet --branch ${base[branch]} ${base[repo]} test-base
-cd test-base
+git clone -q -b ${base[branch]} ${base[repo]} test-base && cd test-base
 base[sha]=$(git log -n 1 | head -1 | sed "s/commit //")
-
 git submodule status >all_sha
 for submodule in $submodules; do
   eval $submodule'[sha]=$(cat all_sha | grep "${'$submodule'[dir]}" | cut -c 2-41)'
 done
 rm -f all_sha
 
-# Check if UFS and components are up to date with ufs-weather-model develop
+# Check if the head branch is up to date with the base branch
 cd ${root_dir}
-git clone --quiet --branch ${head['branch']} --recurse-submodules ${head['repo']} test-head
-cd test-head
+git clone -q -b ${head['branch']} --recursive ${head['repo']} test-head && cd test-head
 head_dir=$(pwd)
 git remote add upstream ${base['repo']}
-git fetch --quiet upstream
-base_common=$(git merge-base upstream/${base['branch']} @)
-if [[ $base_common == ${base[sha]} ]]; then
-  echo "UFS is up to date"
+git fetch -q upstream
+common=$(git merge-base upstream/${base['branch']} @)
+if [[ $common == ${base[sha]} ]]; then
+  result_out
+  echo "UFS is up to date\n"
 else
-  echo "UFS is not up to date"
+  echo "UFS is not up to date\n"
 fi
 
 for submodule in $submodules; do
   eval cd $head_dir/'${'$submodule'[dir]}'
   eval git remote add upstream '${'$submodule'[repo]}'
-  git fetch --quiet upstream
+  git fetch -q upstream
   common=$(eval git merge-base upstream/'${'$submodule'[branch]}' @)
   if (eval test $common = '${'$submodule'[sha]}'); then
-    echo "$submodule is up to date"
+    echo "$submodule is up to date\n"
   else
-    echo "$submodule is not up to date"
+    echo "$submodule is not up to date\n"
   fi
 done
