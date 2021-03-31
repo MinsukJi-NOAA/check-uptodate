@@ -86,9 +86,9 @@ git fetch -q upstream
 common=$(git merge-base upstream/${base['branch']} @)
 if [[ $common == ${base[sha]} ]]; then
   result_out
-  printf "UFS is up to date\n"
+  printf "UFS is up to date"
 else
-  printf "UFS is not up to date\n"
+  printf "UFS is not up to date"
 fi
 
 for submodule in $submodules; do
@@ -97,8 +97,8 @@ for submodule in $submodules; do
   git fetch -q upstream
   common=$(eval git merge-base upstream/'${'$submodule'[branch]}' @)
   if (eval test $common = '${'$submodule'[sha]}'); then
-    printf "$submodule is up to date\n"
+    printf "$submodule is up to date"
   else
-    printf "$submodule is not up to date\n"
+    printf "$submodule is not up to date"
   fi
 done
