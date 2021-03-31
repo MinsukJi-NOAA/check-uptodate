@@ -4,8 +4,10 @@ set -eu
 declare -A head base fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake
 submodules="fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake"
 
-head[repo]='https://github.com/MinsukJi-NOAA/ufs-weather-model'
-head[branch]='feature/ci-regional-model'
+#head[repo]='https://github.com/MinsukJi-NOAA/ufs-weather-model'
+#head[branch]='feature/ci-regional-model'
+head[repo]="https://github.com/$1"
+head[branch]="$2"
 
 base[repo]='https://github.com/ufs-community/ufs-weather-model'
 base[branch]='develop'
@@ -54,10 +56,9 @@ cmake[dir]='CMakeModules'
 root_dir=$(pwd)
 git clone --quiet --branch ${base[branch]} ${base[repo]} test-base
 cd test-base
-base_dir=$(pwd)
 base[sha]=$(git log -n 1 | head -1 | sed "s/commit //")
-git submodule status >all_sha
 
+git submodule status >all_sha
 for submodule in $submodules; do
   eval $submodule'[sha]=$(cat all_sha | grep "${'$submodule'[dir]}" | cut -c 2-41)'
 done
