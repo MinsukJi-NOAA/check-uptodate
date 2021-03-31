@@ -50,22 +50,20 @@ cmake[repo]='https://github.com/NOAA-EMC/CMakeModules'
 cmake[branch]='develop'
 cmake[dir]='CMakeModules'
 
-# Get top-level and component-level SHA-1
+# Get top-level and component-level SHA-1 of top of develop of ufs-weather-model
 root_dir=$(pwd)
-git clone --quiet --branch ${base[branch]} --recurse-submodules ${base[repo]} test-base
+git clone --quiet --branch ${base[branch]} ${base[repo]} test-base
 cd test-base
 base_dir=$(pwd)
-base[sha]="$(git rev-parse origin/${base[branch]})" 
+base[sha]=$(git log -n 1 | head -1 | sed "s/commit //")
+git submodule status >all_sha
 
 for submodule in $submodules; do
-  eval cd $base_dir/'${'$submodule'[dir]}'
-  eval $submodule'[sha]=$(git log -n 1 | head -1 | sed "s/commit //")'
+  eval $submodule'[sha]=$(cat all_sha | grep "${'$submodule'[dir]}" | cut -c 2-41)'
 done
+rm -f all_sha
 
-#cd $base_dir/FV3
-#fv3['sha']=$(git branch | grep -o "at [a-zA-Z0-9]\{4,9\}" | sed 's/^...//;s/.$//')
-#fv3[sha]=$(git log -n 1 | head -1 | sed 's/commit //')
-
+# Check if UFS and components are up to date with ufs-weather-model develop
 cd ${root_dir}
 git clone --quiet --branch ${head['branch']} --recurse-submodules ${head['repo']} test-head
 cd test-head
@@ -74,11 +72,10 @@ git remote add upstream ${base['repo']}
 git fetch --quiet upstream
 base_common=$(git merge-base upstream/${base['branch']} @)
 if [[ $base_common == ${base[sha]} ]]; then
-  echo "UFS up to date"
+  echo "UFS is up to date"
 else
-  echo "UFS not up to date"
+  echo "UFS is not up to date"
 fi
-
 
 for submodule in $submodules; do
   eval cd $head_dir/'${'$submodule'[dir]}'
@@ -91,13 +88,3 @@ for submodule in $submodules; do
     echo "$submodule is not up to date"
   fi
 done
-
-#cd $head_dir/FV3
-#git remote add upstream ${fv3['repo']}
-#git fetch upstream
-#fv3_common=$(git merge-base upstream/${fv3['branch']} @)
-#if [[ $fv3_common == ${fv3['sha']} ]]; then
-#  echo "FV3 up to date"
-#else
-#  echo "FV3 not up to date"
-#fi
