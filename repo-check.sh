@@ -68,14 +68,19 @@ cmake[branch]='develop'
 cmake[dir]='CMakeModules'
 
 # Get sha-1's of the top of develop of ufs-weather-model
-root_dir=$(pwd)
-git clone -q -b ${base[branch]} ${base[repo]} test-base && cd test-base
-base[sha]=$(git log -n 1 | head -1 | sed "s/commit //")
-git submodule status >all_sha
+#root_dir=$(pwd)
+#git clone -q -b ${base[branch]} ${base[repo]} test-base && cd test-base
+#base[sha]=$(git log -n 1 | head -1 | sed "s/commit //")
+#git submodule status >all_sha
+#for submodule in $submodules; do
+#  eval $submodule'[sha]=$(cat all_sha | grep "${'$submodule'[dir]}" | cut -c 2-41)'
+#done
+#rm -f all_sha
+# Use GitHub API so we don't have to check out the ufs-weather-model repository
+base[sha]=$ufs
 for submodule in $submodules; do
-  eval $submodule'[sha]=$(cat all_sha | grep "${'$submodule'[dir]}" | cut -c 2-41)'
+  eval $submodule'[sha]=$submodule'
 done
-rm -f all_sha
 
 # Check if the head branch is up to date with the base branch
 cd ${root_dir}
@@ -88,7 +93,7 @@ if [[ $common == ${base[sha]} ]]; then
   result_out
   printf "* ufs-weather-model is up to date\\\\n"
 else
-  printf "* ufs-weather-model is not up to date\\\\n"
+  printf "* ufs-weather-model is **NOT** up to date\\\\n"
 fi
 
 for submodule in $submodules; do
