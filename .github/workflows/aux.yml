@@ -22,13 +22,14 @@ jobs:
         sha=$(curl -sS -H "$app" $url | ./json_helper.py repository)
         echo "develop=$sha" >> GITHUB_ENV
         names="FV3 MOM6-interface/MOM6 CICE-interface/CICE WW3 stochastic_physics FMS NEMS CMEPS-interface/CMEPS DATM CMakeModules"
-        for name in $names: do
+        for name in $names; do
           url="https://api.github.com/repos/ufs-community/ufs-weather-model/contents/$name"
           sha=$(curl -sS -H "$app" $url | ./json_helper.py component)
           echo "$name=$sha" >> GITHUB_ENV
         done
         echo "${{ env.FV3 }}"
         echo "${{ env.DATM }}"
+        ./test3.sh
 
 #    - name: try check run
 #      run: |
