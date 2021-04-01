@@ -28,7 +28,7 @@ jobs:
           echo "$name=$sha" >> GITHUB_ENV
         done
         echo "${{ env.FV3 }}"
-        echo "${{ env.MOM6-interface/MOM6 }}"
+        #echo "${{ env.MOM6-interface/MOM6 }}"
         echo "${{ env.DATM }}"
 
 #    - name: try check run
