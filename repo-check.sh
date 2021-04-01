@@ -83,7 +83,7 @@ for submodule in $submodules; do
 done
 
 # Check if the head branch is up to date with the base branch
-cd ${root_dir}
+#cd ${root_dir}
 git clone -q -b ${head['branch']} --recursive ${head['repo']} test-head && cd test-head
 head_dir=$(pwd)
 git remote add upstream ${base['repo']}
