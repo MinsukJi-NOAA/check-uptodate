@@ -26,6 +26,7 @@ jobs:
         i=0
         for name in $names; do
           url="https://api.github.com/repos/ufs-community/ufs-weather-model/contents/${dirs[$i]}"
+          echo $url
           sha=$(curl -sS -H "$app" $url | ./json_helper.py component)
           echo "$name=$sha"
           echo "$name=$sha" >> $GITHUB_ENV
