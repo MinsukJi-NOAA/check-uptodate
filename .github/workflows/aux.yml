@@ -33,6 +33,8 @@ jobs:
 
     - name: try check run
       run: |
+        ./test3
+        echo "============================"
         head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
         echo $head_sha
         echo "============================="
