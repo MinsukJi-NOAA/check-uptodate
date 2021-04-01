@@ -28,6 +28,12 @@ jobs:
         echo "${{ env.DATM }}"
         ./test3.sh
 
+    - name: Look up env vars
+      run: |
+        echo $FV3
+        echo "${{ env.FV3 }}"
+        echo "${{ env.DATM }}"
+        ./test3.sh
 #    - name: try check run
 #      run: |
 #        head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
