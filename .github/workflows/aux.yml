@@ -31,10 +31,10 @@ jobs:
 
     - name: Look up env vars
       run: |
-        echo $FV3
+        echo ${FV3}
+        echo ${MOM6-interface/MOM6}
         echo "${{ env.FV3 }}"
         echo "${{ env.DATM }}"
-        echo "${{ env.MOM6-interface/MOM6 }}"
         ./test3.sh
 #    - name: try check run
 #      run: |
