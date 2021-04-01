@@ -27,7 +27,7 @@ jobs:
           sha=$(curl -sS -H "$app" $url | ./json_helper.py component)
           echo $sha
           echo "$name=$sha"
-          echo "$name=$sha" >> $GITHUB_ENV
+          eval echo "$name=$sha" >> $GITHUB_ENV
         done
         echo $FV3
         echo "${{ env.FV3 }}"
