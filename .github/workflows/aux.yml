@@ -21,20 +21,23 @@ jobs:
         url="https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop"
         sha=$(curl -sS -H "$app" $url | ./json_helper.py repository)
         echo "develop=$sha" >> GITHUB_ENV
-        names="FV3 MOM6-interface/MOM6 CICE-interface/CICE WW3 stochastic_physics FMS NEMS CMEPS-interface/CMEPS DATM CMakeModules"
+        name="fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake"
+        dirs=(FV3 MOM6-interface/MOM6 CICE-interface/CICE WW3 stochastic_physics FMS NEMS CMEPS-interface/CMEPS DATM CMakeModules)
+        i=0
         for name in $names; do
-          url="https://api.github.com/repos/ufs-community/ufs-weather-model/contents/$name"
+          url="https://api.github.com/repos/ufs-community/ufs-weather-model/contents/${dirs[$i]}"
           sha=$(curl -sS -H "$app" $url | ./json_helper.py component)
           echo "$name=$sha"
           echo "$name=$sha" >> $GITHUB_ENV
+          i=$((i+1))
         done
 
     - name: Look up env vars
       run: |
-        echo ${FV3}
-        echo ${MOM6-interface/MOM6}
-        echo "${{ env.FV3 }}"
-        echo "${{ env.DATM }}"
+        echo ${fv3}
+        echo ${mom6}
+        echo "${{ env.fv3 }}"
+        echo "${{ env.datm }}"
         ./test3.sh
 #    - name: try check run
 #      run: |
