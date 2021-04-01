@@ -15,15 +15,30 @@ jobs:
     - name: Checkout codes
       uses: actions/checkout@v2
 
-    - name: try check run
+    - name: Get repository
       run: |
-        head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
-        echo $head_sha
-        echo "============================="
-        cat ${GITHUB_EVENT_PATH}
-        echo "============================="
-        comment_body="$(./repo-check.sh MinsukJi-NOAA feature/ci-regional-model)"
-        echo ${comment_body}
-        curl -sS -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/issues/2/comments \
-        -d '{"body": "'"${comment_body}"'"}'
+        curl -sS -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/ufs-community/ufs-weather-model
+
+    - name: Get branch
+      run: |
+        curl -sS -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/ufs-community/ufs-weather-model/branches/devel
+
+    - name: Get repository content
+      run: |
+        curl -sS -H "Accept: application/vnd.github.v3+json" \
+        https://api.github.com/repos/ufs-community/ufs-weather-model/contents/FV3
+
+#    - name: try check run
+#      run: |
+#        head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
+#        echo $head_sha
+#        echo "============================="
+#        cat ${GITHUB_EVENT_PATH}
+#        echo "============================="
+#        comment_body="$(./repo-check.sh MinsukJi-NOAA feature/ci-regional-model)"
+#        echo ${comment_body}
+#        curl -sS -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
+#        https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/issues/2/comments \
+#        -d '{"body": "'"${comment_body}"'"}'
