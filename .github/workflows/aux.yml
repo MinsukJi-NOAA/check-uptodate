@@ -23,7 +23,7 @@ jobs:
     - name: Get branch
       run: |
         curl -sS -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/ufs-community/ufs-weather-model/branches/devel
+        https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop
 
     - name: Get repository content
       run: |
