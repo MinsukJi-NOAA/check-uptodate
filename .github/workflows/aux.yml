@@ -21,7 +21,7 @@ jobs:
         url="https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop"
         sha=$(curl -sS -H "$app" $url | ./json_helper.py repository)
         echo "develop=$sha" >> GITHUB_ENV
-        name="fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake"
+        names="fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake"
         dirs=(FV3 MOM6-interface/MOM6 CICE-interface/CICE WW3 stochastic_physics FMS NEMS CMEPS-interface/CMEPS DATM CMakeModules)
         i=0
         for name in $names; do
