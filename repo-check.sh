@@ -77,9 +77,9 @@ cmake[dir]='CMakeModules'
 #done
 #rm -f all_sha
 # Use GitHub API so we don't have to check out the ufs-weather-model repository
-base[sha]=$ufs
+base[sha]=${ufs:-}
 for submodule in $submodules; do
-  eval $submodule'[sha]=$submodule'
+  eval $submodule'[sha]=${submodule:-}'
 done
 
 # Check if the head branch is up to date with the base branch
