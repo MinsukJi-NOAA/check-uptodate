@@ -18,9 +18,9 @@ jobs:
     - name: Get branch
       run: |
         url="https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop"
-        app="Accept: application/vnd.github.v3+json
+        app="Accept: application/vnd.github.v3+json"
         #ufs_sha=$(curl -sS -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop | ./json_helper.py ufs_sha)
-        ufs_sha=$(curl -sS -H "'"$app"'" $url | ./json_helper.py ufs_sha)
+        ufs_sha=$(curl -sS -H "$app" $url | ./json_helper.py ufs_sha)
         echo "ufs sha is $ufs_sha"
 
     - name: Get repository content of FV3
