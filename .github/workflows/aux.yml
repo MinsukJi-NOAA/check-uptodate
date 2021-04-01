@@ -15,23 +15,21 @@ jobs:
     - name: Checkout codes
       uses: actions/checkout@v2
 
-    - name: Get branch
+    - name: Get ufs-weather-model sha's
       run: |
-        url="https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop"
         app="Accept: application/vnd.github.v3+json"
-        #ufs_sha=$(curl -sS -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop | ./json_helper.py ufs_sha)
-        ufs_sha=$(curl -sS -H "$app" $url | ./json_helper.py ufs_sha)
-        echo "ufs sha is $ufs_sha"
-
-    - name: Get repository content of FV3
-      run: |
-        fv3_sha=$(curl -sS -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ufs-community/ufs-weather-model/contents/FV3 | ./json_helper.py fv3_sha)
-        echo "fv3 sha is $fv3_sha"
-
-    - name: Get repository content of WW3
-      run: |
-        ww3_sha=$(curl -sS -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ufs-community/ufs-weather-model/contents/WW3 | ./json_helper.py ww3_sha)
-        echo "ww3 sha is $ww3_sha"
+        url="https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop"
+        sha=$(curl -sS -H "$app" $url | ./json_helper.py repository)
+        echo "develop=$sha" >> GITHUB_ENV
+        names="FV3 MOM6-interface/MOM6 CICE-interface/CICE WW3 stochastic_physics FMS NEMS CMEPS-interface/CMEPS DATM CMakeModules"
+        for name in $names: do
+          url="https://api.github.com/repos/ufs-community/ufs-weather-model/contents/$name"
+          sha=$(curl -sS -H "$app" $url | ./json_helper.py component)
+          echo "$name=$sha" >> GITHUB_ENV
+        done
+        echo "${{ env.FV3 }}"
+        echo "${{ env.MOM6-interface/MOM6 }}"
+        echo "${{ env.DATM }}"
 
 #    - name: try check run
 #      run: |

@@ -39,11 +39,9 @@ def main():
       print("")
     else:
       print(*wfs)
-  elif sys.argv[1]=="ufs_sha":
+  elif sys.argv[1]=="repository":
     print(json.load(sys.stdin)["commit"]["sha"])
-  elif sys.argv[1]=="fv3_sha":
-    print(json.load(sys.stdin)["sha"])
-  elif sys.argv[1]=="ww3_sha":
+  elif sys.argv[1]=="component":
     print(json.load(sys.stdin)["sha"])
   else:
     print("ERROR")
