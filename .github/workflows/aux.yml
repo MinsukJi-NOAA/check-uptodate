@@ -15,25 +15,20 @@ jobs:
     - name: Checkout codes
       uses: actions/checkout@v2
 
-    - name: Get repository
-      run: |
-        curl -sS -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/ufs-community/ufs-weather-model
-
     - name: Get branch
       run: |
-        curl -sS -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop
+        ufs_sha=$(curl -sS -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop | ./json_helper.py ufs_sha)
+        echo "ufs sha is $ufs_sha"
 
     - name: Get repository content of FV3
       run: |
-        curl -sS -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/ufs-community/ufs-weather-model/contents/FV3
+        fv3_sha=$(curl -sS -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ufs-community/ufs-weather-model/contents/FV3 | ./json_helper.py fv3_sha)
+        echo "fv3 sha is $fv3_sha"
 
     - name: Get repository content of WW3
       run: |
-        curl -sS -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/ufs-community/ufs-weather-model/contents/WW3
+        ww3_sha=$(curl -sS -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ufs-community/ufs-weather-model/contents/WW3 | ./json_helper.py ww3_sha)
+        echo "ww3 sha is $ww3_sha"
 
 #    - name: try check run
 #      run: |
