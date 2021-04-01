@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eux
 
 usage() {
   echo
@@ -17,6 +17,7 @@ readonly program=$(basename $0)
 
 declare -A head base fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake
 submodules="fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake"
+#submodules="fv3 mom6"
 
 # Head branch:this is a branch from which PR is made
 head[repo]="https://github.com/$1/ufs-weather-model"
@@ -79,31 +80,43 @@ cmake[dir]='CMakeModules'
 # Use GitHub API so we don't have to check out the ufs-weather-model repository
 base[sha]=${ufs:-}
 for submodule in $submodules; do
-  eval $submodule'[sha]=${submodule:-}'
+  eval $submodule'[sha]=${'$submodule'_e:-}'
 done
+
+echo ${base[sha]}
+echo ${fv3[sha]}
+echo ${mom6[sha]}
+echo ${cice[sha]}
+echo ${ww3[sha]}
+echo ${stoch[sha]}
+echo ${fms[sha]}
+echo ${nems[sha]}
+echo ${cmeps[sha]}
+echo ${datm[sha]}
+echo ${cmake[sha]}
 
 # Check if the head branch is up to date with the base branch
-#cd ${root_dir}
-git clone -q -b ${head['branch']} --recursive ${head['repo']} test-head && cd test-head
-head_dir=$(pwd)
-git remote add upstream ${base['repo']}
-git fetch -q upstream
-common=$(git merge-base upstream/${base['branch']} @)
-if [[ $common == ${base[sha]} ]]; then
-  result_out
-  printf "* ufs-weather-model is up to date\\\\n"
-else
-  printf "* ufs-weather-model is **NOT** up to date\\\\n"
-fi
-
-for submodule in $submodules; do
-  eval cd $head_dir/'${'$submodule'[dir]}'
-  eval git remote add upstream '${'$submodule'[repo]}'
-  git fetch -q upstream
-  common=$(eval git merge-base upstream/'${'$submodule'[branch]}' @)
-  if (eval test $common = '${'$submodule'[sha]}'); then
-    printf "* $submodule is up to date\\\\n"
-  else
-    printf "* $submodule is not up to date\\\\n"
-  fi
-done
+##cd ${root_dir}
+#git clone -q -b ${head['branch']} --recursive ${head['repo']} test-head && cd test-head
+#head_dir=$(pwd)
+#git remote add upstream ${base['repo']}
+#git fetch -q upstream
+#common=$(git merge-base upstream/${base['branch']} @)
+#if [[ $common == ${base[sha]} ]]; then
+#  result_out
+#  printf "* ufs-weather-model is up to date\\\\n"
+#else
+#  printf "* ufs-weather-model is **NOT** up to date\\\\n"
+#fi
+#
+#for submodule in $submodules; do
+#  eval cd $head_dir/'${'$submodule'[dir]}'
+#  eval git remote add upstream '${'$submodule'[repo]}'
+#  git fetch -q upstream
+#  common=$(eval git merge-base upstream/'${'$submodule'[branch]}' @)
+#  if (eval test $common = '${'$submodule'[sha]}'); then
+#    printf "* $submodule is up to date\\\\n"
+#  else
+#    printf "* $submodule is not up to date\\\\n"
+#  fi
+#done
