@@ -15,25 +15,8 @@ jobs:
     - name: Checkout codes
       uses: actions/checkout@v2
 
-    - name: Get ufs-weather-model sha's
-      run: |
-        app="Accept: application/vnd.github.v3+json"
-        url="https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop"
-        sha=$(curl -sS -H "$app" $url | ./json_helper.py repository)
-        echo "ufs=$sha" >> GITHUB_ENV
-        names="fv3_e mom6_e cice_e ww3_e stoch_e fms_e nems_e cmeps_e datm_e cmake_e"
-        dirs=(FV3 MOM6-interface/MOM6 CICE-interface/CICE WW3 stochastic_physics FMS NEMS CMEPS-interface/CMEPS DATM CMakeModules)
-        i=0
-        for name in $names; do
-          url="https://api.github.com/repos/ufs-community/ufs-weather-model/contents/${dirs[$i]}"
-          sha=$(curl -sS -H "$app" $url | ./json_helper.py component)
-          echo "$name=$sha" >> $GITHUB_ENV
-          i=$((i+1))
-        done
-
     - name: try check run
       run: |
-        ./test3.sh
         echo "============================"
         head_sha=$(cat ${GITHUB_EVENT_PATH} | ./json_helper.py check_run)
         echo $head_sha
@@ -41,7 +24,6 @@ jobs:
         cat ${GITHUB_EVENT_PATH}
         echo "============================="
         comment_body="$(./repo-check.sh MinsukJi-NOAA feature/ci-regional-model)"
-        echo ${comment_body}
-        curl -sS -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/issues/2/comments \
-        -d '{"body": "'"${comment_body}"'"}'
+        app="Accept: application/vnd.github.v3+json"
+        url=https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/issues/2/comments
+        curl -sS -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "$app" $url -d '{"body": "'"${comment_body}"'"}'

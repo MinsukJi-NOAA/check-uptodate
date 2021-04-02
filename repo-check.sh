@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+set -eu
 
 usage() {
   echo
@@ -69,34 +69,15 @@ cmake[branch]='develop'
 cmake[dir]='CMakeModules'
 
 # Get sha-1's of the top of develop of ufs-weather-model
-#root_dir=$(pwd)
-#git clone -q -b ${base[branch]} ${base[repo]} test-base && cd test-base
-#base[sha]=$(git log -n 1 | head -1 | sed "s/commit //")
-#git submodule status >all_sha
-#for submodule in $submodules; do
-#  eval $submodule'[sha]=$(cat all_sha | grep "${'$submodule'[dir]}" | cut -c 2-41)'
-#done
-#rm -f all_sha
-# Use GitHub API so we don't have to check out the ufs-weather-model repository
-base[sha]=${ufs:-}
+app="Accept: application/vnd.github.v3+json"
+url="https://api.github.com/repos/ufs-community/ufs-weather-model/branches/develop"
+base[sha]=$(curl -sS -H "$app" $url | ./json_helper.py repository)
 for submodule in $submodules; do
-  eval $submodule'[sha]=${'$submodule'_e:-}'
+  eval url=https://api.github.com/repos/ufs-community/ufs-weather-model/contents/'${'$submodule'[dir]}'
+  eval $submodule'[sha]=$(curl -sS -H "$app" $url | ./json_helper.py component)'
 done
 
-echo ${base[sha]}
-echo ${fv3[sha]}
-echo ${mom6[sha]}
-echo ${cice[sha]}
-echo ${ww3[sha]}
-echo ${stoch[sha]}
-echo ${fms[sha]}
-echo ${nems[sha]}
-echo ${cmeps[sha]}
-echo ${datm[sha]}
-echo ${cmake[sha]}
-
 # Check if the head branch is up to date with the base branch
-##cd ${root_dir}
 git clone -q -b ${head['branch']} --recursive ${head['repo']} test-head && cd test-head
 head_dir=$(pwd)
 git remote add upstream ${base['repo']}
@@ -117,6 +98,6 @@ for submodule in $submodules; do
   if (eval test $common = '${'$submodule'[sha]}'); then
     printf "* $submodule is up to date\\\\n"
   else
-    printf "* $submodule is not up to date\\\\n"
+    printf "* $submodule is **NOT** up to date\\\\n"
   fi
 done
