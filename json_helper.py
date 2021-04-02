@@ -43,6 +43,8 @@ def main():
     print(json.load(sys.stdin)["commit"]["sha"])
   elif sys.argv[1]=="component":
     print(json.load(sys.stdin)["sha"])
+  elif sys.argv[1]=="issue":
+    print(json.load(sys.stdin)["workflow_run"]["head_repository"]["issues_url"])
   else:
     print("ERROR")
 
