@@ -20,14 +20,6 @@ jobs:
         submodules: recursive
         path: head
 
-    - name: checkout base repo
-      uses: actions/checkout@v2
-      with:
-        repository: ufs-community/ufs-weather-model
-        ref: develop
-        submodules: recursive
-        path: base
-
     - name: checkout current repo
       uses: actions/checkout@v2
 

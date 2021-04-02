@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eu
 
+# This script checks if head repo of PR is up to date with ufs-weather-model develop
+# Checks for top level (ufs-weather-model) and next level components (submodules)
 usage() {
   echo
   echo "Usage: $program <GitHub Username> <Branch name>"
@@ -8,22 +10,26 @@ usage() {
   exit 1
 }
 
-#result_out() {
-#
-#}
+result() {
+  if [[ -n $comment ]]; then
+    comment+="Please update your repositories"
+    printf $comment
+  fi
+}
 
 readonly program=$(basename $0)
 [[ $# != 2 ]] && usage
 
+# Declare variables
 declare -A head base fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake
 submodules="fv3 mom6 cice ww3 stoch fms nems cmeps datm cmake"
-#submodules="fv3 mom6"
+comment=''
 
-# Head branch:this is a branch from which PR is made
+# Head branch: this is the branch from which PR is made
 head[repo]="https://github.com/$1/ufs-weather-model"
 head[branch]="$2"
 
-# Base branch:this is the top of develop of ufs-weather-model
+# Base branch: this is the top of develop of ufs-weather-model
 base[repo]='https://github.com/ufs-community/ufs-weather-model'
 base[branch]='develop'
 
@@ -83,11 +89,9 @@ head_dir=$(pwd)
 git remote add upstream ${base['repo']}
 git fetch -q upstream
 common=$(git merge-base upstream/${base['branch']} @)
-if [[ $common == ${base[sha]} ]]; then
-  result_out
-  printf "* ufs-weather-model is up to date\\\\n"
-else
-  printf "* ufs-weather-model is **NOT** up to date\\\\n"
+if [[ $common != ${base[sha]} ]]; then
+  #printf "* ufs-weather-model is **NOT** up to date\\\\n"
+  comment="* ufs-weather-model is **NOT** up to date\\\\n"
 fi
 
 for submodule in $submodules; do
@@ -95,9 +99,10 @@ for submodule in $submodules; do
   eval git remote add upstream '${'$submodule'[repo]}'
   git fetch -q upstream
   common=$(eval git merge-base upstream/'${'$submodule'[branch]}' @)
-  if (eval test $common = '${'$submodule'[sha]}'); then
-    printf "* $submodule is up to date\\\\n"
-  else
-    printf "* $submodule is **NOT** up to date\\\\n"
+  if (eval test $common != '${'$submodule'[sha]}'); then
+    #printf "* $submodule is **NOT** up to date\\\\n"
+    comment+="* $submodule is **NOT** up to date\\\\n"
   fi
 done
+
+result()
