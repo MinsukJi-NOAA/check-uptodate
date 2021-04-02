@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eux
 
 # This script checks if head repo of PR is up to date with ufs-weather-model develop
 # Checks for top level (ufs-weather-model) and next level components (submodules)
@@ -13,7 +13,7 @@ usage() {
 result() {
   if [[ -n $comment ]]; then
     comment+="Please update your repositories"
-    printf $comment
+    printf %s "$comment"
   fi
 }
 
@@ -91,7 +91,7 @@ git fetch -q upstream
 common=$(git merge-base upstream/${base['branch']} @)
 if [[ $common != ${base[sha]} ]]; then
   #printf "* ufs-weather-model is **NOT** up to date\\\\n"
-  comment="* ufs-weather-model is **NOT** up to date\\\\n"
+  comment="* ufs-weather-model is **NOT** up to date\n"
 fi
 
 for submodule in $submodules; do
@@ -101,8 +101,8 @@ for submodule in $submodules; do
   common=$(eval git merge-base upstream/'${'$submodule'[branch]}' @)
   if (eval test $common != '${'$submodule'[sha]}'); then
     #printf "* $submodule is **NOT** up to date\\\\n"
-    comment+="* $submodule is **NOT** up to date\\\\n"
+    comment+="* $submodule is **NOT** up to date\n"
   fi
 done
 
-result()
+result
