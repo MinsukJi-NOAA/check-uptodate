@@ -31,5 +31,6 @@ jobs:
         echo "GITHUB_EVENT_PATH is ${GITHUB_EVENT_PATH}"
         cat ${GITHUB_EVENT_PATH}
         echo "===================================================="
+        echo ${{ github.event }}
 #        sleep 60
 #        ./say-hello
