@@ -15,7 +15,7 @@ result() {
     logID="MinsukJi-NOAA"
     comment="@$logID please bring these up to date with respective authoritative repositories\n"$comment
     printf %s "$comment"
-    ##exit 1
+    #exit 1
   fi
 }
 
