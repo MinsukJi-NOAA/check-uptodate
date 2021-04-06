@@ -31,3 +31,10 @@ jobs:
         #app="Accept: application/vnd.github.v3+json"
         #url=https://api.github.com/repos/MinsukJi-NOAA/check-uptodate/issues/2/comments
         #curl -sS -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "$app" $url -d '{"body": "'"${comment_body}"'"}'
+
+    - name : GITHUB CONTEXT
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "============================="
+        echo "$GITHUB_CONTEXT"
