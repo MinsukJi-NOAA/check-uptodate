@@ -34,3 +34,10 @@ jobs:
         echo ${{ github.event.number }}
 #        sleep 60
 #        ./say-hello
+
+    - name : GITHUB CONTEXT
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: |
+        echo "============================="
+        echo "$GITHUB_CONTEXT"
