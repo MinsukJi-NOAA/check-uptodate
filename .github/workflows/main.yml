@@ -50,5 +50,5 @@ jobs:
       run : echo $commitmsg
 
     - name: step1
-      if: contains( $commitmsg , 'run-ci' )
+      if: contains( commitmsg , 'run-ci' )
       run: echo hello
